@@ -1,18 +1,18 @@
 import requests
 
-def getCharacters(characters):
-    response = requests.get(f"https://hsr-api.vercel.app/api/v1/characters{hsr.lower()}")
+def getCountries(country):
+    response = requests.get(f"https://countriesnow.space/api/v0.1/countries/population/cities{country.lower()}")
     if response.status_code != 200:
-        print("Error please wait")
+        print("Error fetching data!")
         return None
     
     data = response.json()
     return {
-        "name": data["name"],
-        "element": data["element"],
-        "rarity": data["rarity"],
-        "types": [t["type"]["name"] for t in data["types"]]
+        "country": data["country"],
+        "city": data["city"],
+        "population": data["populationCounts"],
+        "types": [t["type"]["country"] for t in data["types"]]
     }
 
-hsr = getCharacters("Trailblazer")
-print(hsr)
+countries = getCountries("China")
+print(countries)
