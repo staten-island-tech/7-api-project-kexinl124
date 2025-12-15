@@ -14,5 +14,5 @@ def getCountries(country):
         "types": [t["type"]["country"] for t in data["types"]]
     }
 
-countries = getCountries("China")
+countries = getCountries("Åland Islands")
 print(countries)
