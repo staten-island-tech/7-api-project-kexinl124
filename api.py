@@ -11,7 +11,8 @@ def getCountries(country):
         "country": data["country"],
         "city": data["city"],
         "population": data["populationCounts"],
-        "types": [t["type"]["country"] for t in data["types"]]
+        "reliablity":data["reliablity"],
+        
     }
 
 countries = getCountries("Åland Islands")
