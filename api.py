@@ -42,37 +42,37 @@ def getCountries(country):
 countries = getCountries("Åland Islands")
 print(countries)
 
-import tkinter as tk 
-window = tk.Tk()
-window.title("City Population")
-window.geometry("500x300") 
-window.resizable(False, False)
+import tkinter as tk
+from tkinter import messagebox
 
-prompt = tk.Label(window, text="Type a city:",
-font=("Arial", 14))
-prompt.pack(pady=10)
+city_population = {
+    "New York": 8419600,
+    "Los Angeles": 3980400,
+    "Chicago": 2716000,
+    "Houston": 2328000,
+    "Phoenix": 1690000,
+    "San Francisco": 883305,
+    "Boston": 694583
+}
+def get_population():
+    city = city_name_entry.get().strip()
 
-entry = tk.Entry(window, font=("Arial", 14), width=30)
-entry.pack(pady=5)
+    if city in city_population:
+        population = city_population[city]
+        messagebox.showinfo("City Population", f"The population of {city} is {population}.")
+    else:
+        messagebox.showerror("City Not Found", "Sorry, we don't have data for that city.")
 
-result_label = tk.Label(window, text="", font=("Arial", 14, "bold"),
-fg="blue")
-result_label.pack(pady=15)
+root = tk.Tk()
+root.title("City Population Finder")
 
-def citypopulation():
-    if 
-    text = entry.get() 
-    reversed_text = text[::-1]
-    result_label.config(text=f"Backwards: {reversed_text}")
+city_name_label = tk.Label(root, text="Enter a city name:")
+city_name_label.pack(pady=10)
 
-reverse_button = tk.Button(window, text="City Population",
-font=("Arial", 14),
+city_name_entry = tk.Entry(root)
+city_name_entry.pack(pady=5)
 
-command=reverse_message)
+search_button = tk.Button(root, text="Get Population", command=get_population)
+search_button.pack(pady=10)
 
-reverse_button.pack(pady=10)
-
-window.mainloop()
-
-
-    
+root.mainloop()
