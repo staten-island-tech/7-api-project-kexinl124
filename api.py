@@ -59,7 +59,8 @@ result_label = tk.Label(window, text="", font=("Arial", 14, "bold"),
 fg="blue")
 result_label.pack(pady=15)
 
-def reverse_message():
+def citypopulation():
+    if 
     text = entry.get() 
     reversed_text = text[::-1]
     result_label.config(text=f"Backwards: {reversed_text}")
