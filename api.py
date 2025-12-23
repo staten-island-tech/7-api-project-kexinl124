@@ -20,27 +20,49 @@
 
 # def COuntries():
 #     countrIes = input("Which countries do you want to know the population from?")
+# import requests
+
+# def getCountries(country):
+#     url = f"https://countriesnow.space/api/v0.1/countries/population/cities?country={country.lower()}"
+    
+#     response = requests.get(url)
+#     if response.status_code != 200:
+#         print("ERROR")
+#         return None
+        
+#     data = response.json()
+#     print(data)  
+#     return {
+#             "country": data['country'],
+#             "populationCounts": data['populationCounts'],
+#             "value": data['value'],
+#             "year": data['year']
+#         }
+# countries = getCountries("Åland Islands")
+# print(countries)
+
 import requests
 
-def getCountries(country):
-    url = f"https://countriesnow.space/api/v0.1/countries/population/cities?country={country.lower()}"
-    
-    response = requests.get(url)
+def get_cities_population(country):
+    url = "https://countriesnow.space/api/v0.1/countries/population/cities"
+    response = requests.get(url, params={"country": country})
+
     if response.status_code != 200:
         print("ERROR")
         return None
-        
+
     data = response.json()
-    print(data)  
-    # return {
-    #         "city": data['city'],
-    #         "country": data['country'],
-    #         "populationCounts": data['populationCounts'],
-    #         "value": data['value'],
-    #         "year": data['year']
-    #     }
-countries = getCountries("Åland Islands")
-print(countries)
+
+    if data.get("error"):
+        print("API ERROR:", data.get("msg"))
+        return None
+
+    return data["data"] 
+
+cities = get_cities_population("Åland Islands")
+
+for city in cities:
+    print(city["city"], city["populationCounts"])
 
 import tkinter as tk
 from tkinter import messagebox
@@ -57,8 +79,8 @@ city_population = {
 def get_population():
     city = city_name_entry.get().strip()
 
-    if city in city_population:
-        population = city_population[city]
+    if city in "data":
+        population = data[city]
         messagebox.showinfo("City Population", f"The population of {city} is {population}.")
     else:
         messagebox.showerror("City Not Found", "Sorry, we don't have data for that city.")
