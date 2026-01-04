@@ -42,7 +42,7 @@
 # print(countries)
 
 import requests
-url = https://countriesnow.space/api/v0.1/countries/population/cities
+url = "https://countriesnow.space/api/v0.1/countries/population/cities"
 
 def get_cities_population(country):
     url = "https://countriesnow.space/api/v0.1/countries/population/cities"
