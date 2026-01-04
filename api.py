@@ -68,12 +68,10 @@ def search():
         if information["city"].lower() == user_city:
             findplace = True
 
-            for record in information["populationCounts"]:
-                if record["year"] == user_year:
+            for i in information["populationCounts"]:
+                if i["year"] == user_year:
                     result_text.set(
-                        f"City: {information['city']}"
-                        f"Year: {record['year']}"
-                        f"Population: {record['value']}"
+                        f"City: {information['city']}, Year: {i['year']}, Population: {i['value']}"
                     )
                     findyear = True      
             break  
