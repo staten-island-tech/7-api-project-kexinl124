@@ -1,126 +1,107 @@
 # import requests
 
-# def getCountries(country):
-#     response = requests.get(f"https://countriesnow.space/api/v0.1/countries/population/cities{country.lower()}")
+# url = "https://countriesnow.space/api/v0.1/countries/population/cities"
+
+# def findpopulation():
+#     response = requests.get(url)
 #     if response.status_code != 200:
 #         print("ERROR")
-#         return None
-    
-#     data = response.json()
-#     return {
-#         "city": data["city"],
-#         "country": data["country"],
-#         "populationCounts": data["populationCounts"],
-#         "MSG": [c["type"]["city"] for c in data["types"]]
-#     }
+#         return []
+#     return response.json()["data"]
+# data = findpopulation()
 
-# countries = getCountries("Åland Islands")
-# print(countries)
+# user_city = input("State a city:").lower()
+# user_year = int(input("Give a specific year:"))
+
+# findplace = False
+# findyear = False
+
+# for information in data:
+#     if information["city"].lower() == user_city:
+#         findplace = True
+    
+#         for i in information["populationCounts"]:
+#             if str(user_year) == i["year"]:
+#                 print("Data found!")
+#                 print("Country", information["country"])
+#                 print("City", information["city"])
+#                 print("Year:", i["year"])
+#                 print("Population:", i["value"])
+#                 findyear = True
+#         break
+        
+# if findplace == False:
+#         print("Error, city not found. Try again!")
+# elif findyear == False:
+#      print("Error, no data for this year. Try again!")
+# else:
+#      print("Great!")
+
+#Tkinter
 
 import requests
+import tkinter as tk
+from tkinter import messagebox
 
-url = "https://countriesnow.space/api/v0.1/countries/population/cities"
-
-def getCountries(country):
-    response = requests.get(url, params={"country": country})
-
+def findpopulation():
+    url = "https://countriesnow.space/api/v0.1/countries/population/cities"
+    response = requests.get(url)
     if response.status_code != 200:
-        print("ERROR")
-        return None
+        messagebox.showerror("Error", "Failed to fetch data from API")
+        return []
+    return response.json()["data"]
 
-    data = response.json()
+data = findpopulation()
 
-    if data.get("error"):
-        print("API ERROR:", data.get("msg"))
-        return None
+def search():
+    user_city = city_entry.get().strip().lower()
+    user_year = year_entry.get().strip()
 
-    return data["data"]  
+    if not user_city or not user_year:
+        messagebox.showwarning("Input Error", "Please enter both city and year.")
+        return
 
-countries = getCountries("Åland Islands")
+    findplace = False
+    findyear = False
 
-user_city=input("What city do you want to know the population for?").lower()
+    for information in data:
+        if information["city"].lower() == user_city:
+            findplace = True
 
-for city_data in countries:
-    if city_data["city"].lower() == user_city:
-        print("City:", city_data["city"])
-        print("Population records:", city_data["populationCounts"])
-        break
+            for record in information["populationCounts"]:
+                if record["year"] == user_year:
+                    result_text.set(
+                        f"City: {information['city']}"
+                        f"Year: {record['year']}"
+                        f"Population: {record['value']}"
+                    )
+                    findyear = True      
+            break  
 
-if user_city not in city_data["city"]:
-   print("we don't got that")
-    
-
-
-# import requests
-# import tkinter as tk
-# from tkinter import messagebox
-
-
-# def get_cities_population(country):
-#     url = "https://countriesnow.space/api/v0.1/countries/population/cities"
-#     response = requests.get(url, params={"country": country})
-
-#     if response.status_code != 200:
-#         messagebox.showerror("Error", "Failed to fetch data from API")
-#         return {}
-
-#     data = response.json()
-
-#     if data.get("error"):
-#         messagebox.showerror("API Error", data.get("msg"))
-#         return {}
-
-#     city_dict = {}
-
-#     for city in data["data"]:
-#         if not city.get("populationCounts"):
-#             print("sorry no data")
-
-#         latest = city["populationCounts"][-1].get("value")
-
-#         if latest is None:
-#             continue
-
-#         try:
-#             city_dict[city["city"].lower()] = int(float(latest))
-#         except ValueError:
-#             continue
-
-#     return city_dict
-
-# city_population = get_cities_population("Åland Islands")
+    if findplace == False:
+        messagebox.showerror("Error", "City not found. Try again!")
+        result_text.set("")
+    elif findyear == False:
+        messagebox.showerror("Error", "No data for this year. Try again!")
+        result_text.set("")
 
 
-# def get_population():
-#     city = city_name_entry.get().strip().lower()
+root = tk.Tk()
+root.title("City Population Finder")
+root.geometry("450x300")
 
-#     if not city:
-#         messagebox.showwarning("Input Error", "Please enter a city name.")
-#         return
+tk.Label(root, text="Enter City:").pack(pady=5)
+city_entry = tk.Entry(root, width=30)
+city_entry.pack(pady=5)
 
-#     if city in city_population:
-#         population = city_population[city]
-#         messagebox.showinfo(
-#             "City Population",
-#             f"The population of {city.title()} is {population:,}."
-#         )
-#     else:
-#         messagebox.showerror(
-#             "City Not Found",
-#             "Sorry, we don't have data for that city."
-#         )
+tk.Label(root, text="Enter Year:").pack(pady=5)
+year_entry = tk.Entry(root, width=30)
+year_entry.pack(pady=5)
 
+tk.Button(root, text="Search Population", command=search).pack(pady=10)
 
-# root = tk.Tk()
-# root.title("City Population Finder")
+result_text = tk.StringVar()
+result_label = tk.Label(root, textvariable=result_text, justify="left")
+result_label.pack(pady=10)
 
-# city_name_label = tk.Label(root, text="Enter a city name:")
-# city_name_label.pack(pady=10)
-
-# city_name_entry = tk.Entry(root)
-# city_name_entry.pack(pady=5)
-
-# search_button = tk.Button(root, text="Get Population", command=get_population)
-# search_button.pack(pady=10)
-
-# root.mainloop()
+root.mainloop()
