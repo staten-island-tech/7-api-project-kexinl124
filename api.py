@@ -17,39 +17,15 @@
 # countries = getCountries("Åland Islands")
 # print(countries)
 
-
-# def COuntries():
-#     countrIes = input("Which countries do you want to know the population from?")
-# import requests
-
-# def getCountries(country):
-#     url = f"https://countriesnow.space/api/v0.1/countries/population/cities?country={country.lower()}"
-    
-#     response = requests.get(url)
-#     if response.status_code != 200:
-#         print("ERROR")
-#         return None
-        
-#     data = response.json()
-#     print(data)  
-#     return {
-#             "country": data['country'],
-#             "populationCounts": data['populationCounts'],
-#             "value": data['value'],
-#             "year": data['year']
-#         }
-# countries = getCountries("Åland Islands")
-# print(countries)
-
 import requests
+
 url = "https://countriesnow.space/api/v0.1/countries/population/cities"
 
-def get_cities_population(country):
-    url = "https://countriesnow.space/api/v0.1/countries/population/cities"
+def getCountries(country):
     response = requests.get(url, params={"country": country})
 
     if response.status_code != 200:
-        print("Sorry, error fetching data!")
+        print("ERROR")
         return None
 
     data = response.json()
@@ -58,44 +34,93 @@ def get_cities_population(country):
         print("API ERROR:", data.get("msg"))
         return None
 
-    return data["data"] 
+    return data["data"]  
 
-cities = get_cities_population("Åland Islands")
+countries = getCountries("Åland Islands")
 
-for city in cities:
-    print(city["city"], city["populationCounts"])
+user_city=input("What city do you want to know the population for?").lower()
 
-import tkinter as tk
-from tkinter import messagebox
+for city_data in countries:
+    if city_data["city"].lower() == user_city:
+        print("City:", city_data["city"])
+        print("Population records:", city_data["populationCounts"])
+        break
 
-city_population = {
-    "New York": 8419600,
-    "Los Angeles": 3980400,
-    "Chicago": 2716000,
-    "Houston": 2328000,
-    "Phoenix": 1690000,
-    "San Francisco": 883305,
-    "Boston": 694583
-}
-def get_population():
-    city = city_name_entry.get().strip()
+if user_city not in city_data["city"]:
+   print("we don't got that")
+    
 
-    if city in "data":
-        population = data[city]
-        messagebox.showinfo("City Population", f"The population of {city} is {population}.")
-    else:
-        messagebox.showerror("City Not Found", "Sorry, we don't have data for that city.")
 
-root = tk.Tk()
-root.title("City Population Finder")
+# import requests
+# import tkinter as tk
+# from tkinter import messagebox
 
-city_name_label = tk.Label(root, text="Enter a city name:")
-city_name_label.pack(pady=10)
 
-city_name_entry = tk.Entry(root)
-city_name_entry.pack(pady=5)
+# def get_cities_population(country):
+#     url = "https://countriesnow.space/api/v0.1/countries/population/cities"
+#     response = requests.get(url, params={"country": country})
 
-search_button = tk.Button(root, text="Get Population", command=get_population)
-search_button.pack(pady=10)
+#     if response.status_code != 200:
+#         messagebox.showerror("Error", "Failed to fetch data from API")
+#         return {}
 
-root.mainloop()
+#     data = response.json()
+
+#     if data.get("error"):
+#         messagebox.showerror("API Error", data.get("msg"))
+#         return {}
+
+#     city_dict = {}
+
+#     for city in data["data"]:
+#         if not city.get("populationCounts"):
+#             print("sorry no data")
+
+#         latest = city["populationCounts"][-1].get("value")
+
+#         if latest is None:
+#             continue
+
+#         try:
+#             city_dict[city["city"].lower()] = int(float(latest))
+#         except ValueError:
+#             continue
+
+#     return city_dict
+
+# city_population = get_cities_population("Åland Islands")
+
+
+# def get_population():
+#     city = city_name_entry.get().strip().lower()
+
+#     if not city:
+#         messagebox.showwarning("Input Error", "Please enter a city name.")
+#         return
+
+#     if city in city_population:
+#         population = city_population[city]
+#         messagebox.showinfo(
+#             "City Population",
+#             f"The population of {city.title()} is {population:,}."
+#         )
+#     else:
+#         messagebox.showerror(
+#             "City Not Found",
+#             "Sorry, we don't have data for that city."
+#         )
+
+
+# root = tk.Tk()
+# root.title("City Population Finder")
+
+# city_name_label = tk.Label(root, text="Enter a city name:")
+# city_name_label.pack(pady=10)
+
+# city_name_entry = tk.Entry(root)
+# city_name_entry.pack(pady=5)
+
+# search_button = tk.Button(root, text="Get Population", command=get_population)
+# search_button.pack(pady=10)
+
+# root.mainloop()
