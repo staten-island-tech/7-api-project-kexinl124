@@ -37,7 +37,7 @@
 # else:
 #      print("Great!")
 
-#Tkinter
+
 
 import requests
 import tkinter as tk
@@ -88,7 +88,7 @@ root = tk.Tk()
 root.title("City Population Finder")
 root.geometry("450x300")
 
-tk.Label(root, text="Enter City:").pack(pady=5)
+tk.Label(root, text="For city in US please type the states like (NY)/Enter City:").pack(pady=5)
 city_entry = tk.Entry(root, width=30)
 city_entry.pack(pady=5)
 
